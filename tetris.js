@@ -2,59 +2,60 @@ class Game {
   constructor() {
     this.currentFigure = [
       [0, 0, 0, 0],
-      [0, 0, 1, 0],
-      [1, 1, 1, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
       [0, 0, 0, 0]
     ];
+    this.listFigure = [
+      [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [1, 1, 1, 1],
+        [0, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 1, 1, 1],
+        [0, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0],
+        [0, 0, 1, 0],
+        [1, 1, 1, 0],
+        [0, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0],
+        [0, 1, 1, 0],
+        [0, 1, 1, 0],
+        [0, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0],
+        [0, 0, 1, 1],
+        [0, 1, 1, 0],
+        [0, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0],
+        [1, 1, 0, 0],
+        [0, 1, 1, 0],
+        [0, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0],
+        [0, 0, 1, 0],
+        [0, 1, 1, 1],
+        [0, 0, 0, 0]
+      ]
+    ];
+    this.listFixedFigure = [];
     this.x = 120;
     this.y = 0;
     this.width = 20;
     this.acceleration = 0;
     this.updateGame = 500;
-    this.listFigure = [
-      [
-        [0, 0, 0, 0],
-        [0, 0, 1, 0],
-        [1, 1, 1, 0],
-        [0, 0, 0, 0]
-      ],
-      [
-        [0, 0, 0, 0],
-        [0, 0, 1, 0],
-        [1, 1, 1, 0],
-        [0, 0, 0, 0]
-      ],
-      [
-        [0, 0, 0, 0],
-        [0, 0, 1, 0],
-        [1, 1, 1, 0],
-        [0, 0, 0, 0]
-      ],
-      [
-        [0, 0, 0, 0],
-        [0, 0, 1, 0],
-        [1, 1, 1, 0],
-        [0, 0, 0, 0]
-      ],
-      [
-        [0, 0, 0, 0],
-        [0, 0, 1, 0],
-        [1, 1, 1, 0],
-        [0, 0, 0, 0]
-      ],
-      [
-        [0, 0, 0, 0],
-        [0, 0, 1, 0],
-        [1, 1, 1, 0],
-        [0, 0, 0, 0]
-      ],
-      [
-        [0, 0, 0, 0],
-        [0, 0, 1, 0],
-        [1, 1, 1, 0],
-        [0, 0, 0, 0]
-      ]
-    ];
   }
   createGame() {
     let canvasGame = document.createElement('canvas');
@@ -67,16 +68,35 @@ class Game {
     document.addEventListener('keyup', game.onkeyup);
   }
   startGame() {
+    this.currentFigure = this.listFigure[getRandomInt(0, 7)];
     setInterval(this.moveGame.bind(this), 500);
   }
   moveGame() {
     this.renderGame();
     if (this.acceleration) this.y += this.width * 2;
     this.y += this.width;
-    console.log(this.y);
+    if (this.y === 400) {
+      let x = this.x;
+      let y = this.y;
+      this.currentFigure.forEach((arrOut) => {
+        x = this.x;
+        arrOut.forEach((elm) => {
+          if (elm) this.listFixedFigure.push({
+            x,
+            y
+          });
+          x += this.width;
+        })
+        y += this.width;
+      })
+      this.currentFigure = this.listFigure[getRandomInt(0, 7)];
+      this.x = 120;
+      this.y = 0;
+    }
   }
   renderGame() {
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    // render current figure
     let x = this.x;
     let y = this.y;
     this.currentFigure.forEach((arrOut) => {
@@ -86,6 +106,10 @@ class Game {
         x += this.width;
       })
       y += this.width;
+    })
+    // render all fixed figures
+    this.listFixedFigure.forEach((elm) => {
+      this.ctx.fillRect(elm.x, elm.y, this.width, this.width);
     })
   }
   rotateFigure() {
@@ -127,10 +151,14 @@ class Game {
     }
   }
   onkeyup(e) {
-    if (e.keyCode === 40) {
+    if (e.keyCode === 40) { // down
       game.cancelAccelerationFigure();
     }
   }
+}
+
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
 }
 
 let game = new Game();
