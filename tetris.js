@@ -10,6 +10,51 @@ class Game {
     this.y = 0;
     this.width = 20;
     this.acceleration = 0;
+    this.updateGame = 500;
+    this.listFigure = [
+      [
+        [0, 0, 0, 0],
+        [0, 0, 1, 0],
+        [1, 1, 1, 0],
+        [0, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0],
+        [0, 0, 1, 0],
+        [1, 1, 1, 0],
+        [0, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0],
+        [0, 0, 1, 0],
+        [1, 1, 1, 0],
+        [0, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0],
+        [0, 0, 1, 0],
+        [1, 1, 1, 0],
+        [0, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0],
+        [0, 0, 1, 0],
+        [1, 1, 1, 0],
+        [0, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0],
+        [0, 0, 1, 0],
+        [1, 1, 1, 0],
+        [0, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0],
+        [0, 0, 1, 0],
+        [1, 1, 1, 0],
+        [0, 0, 0, 0]
+      ]
+    ];
   }
   createGame() {
     let canvasGame = document.createElement('canvas');
@@ -26,10 +71,9 @@ class Game {
   }
   moveGame() {
     this.renderGame();
-    if (this.acceleration) {
-      this.y += this.width * 2;
-    }
+    if (this.acceleration) this.y += this.width * 2;
     this.y += this.width;
+    console.log(this.y);
   }
   renderGame() {
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
